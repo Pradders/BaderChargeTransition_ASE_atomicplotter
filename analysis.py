@@ -8,7 +8,10 @@ import numpy as np #Mathematical calculations
 
 #Import external functions
 from io_utils import read_bader
-from check import check_atom_consistency, check_bader_alignment
+from check import check_Bader_consistency, check_bader_alignment
+from inputs import process_structures, delete_shift
+
+import os #Operating system
 
 #Calculate Bader charge difference
 def collect_delta_results(structure_files, skip_errors=False):
@@ -36,18 +39,21 @@ def collect_delta_results(structure_files, skip_errors=False):
                 raise ValueError(f"Empty ACF.dat file in {item['transition']}")
 
             #Checks
-            check_atom_consistency(item, ini_q, fin_q) #Check consistency of atomic length between files
+            check_Bader_consistency(item, ini_q, fin_q) #Check consistency of atomic length between files
             check_bader_alignment(ini_atoms, ini_coords) #Coordinate alignment check
             check_bader_alignment(fin_atoms, fin_coords)
 
             #Calculate Bader charge difference
             delta_q = np.round(np.array(fin_q) - np.array(ini_q), 3)
 
+            #Unwrap both initial and final structures
+            ini_atoms_update, fin_atoms_update = process_structures(ini_atoms, fin_atoms)
+
             #Collect all data and store in array. Should plot initial and final structures to observe both atomic movement and charge differences more easily.
             delta_results.append({
                 "transition": item["transition"],
-                "ini_structure": item["ini_structure"],
-                "fin_structure": item["fin_structure"],
+                "ini_structure": ini_atoms_update,
+                "fin_structure": fin_atoms_update,
                 "delta": delta_q
             })
 
@@ -57,6 +63,10 @@ def collect_delta_results(structure_files, skip_errors=False):
                 continue
             else:
                 raise #Raise error if necessary        
+
+    #If the shift json file is created, then delete it after use
+    if os.path.exists("shift.json"):
+        delete_shift()
 
     #Print if desired
     #print(delta_results)

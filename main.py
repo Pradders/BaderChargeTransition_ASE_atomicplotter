@@ -23,7 +23,7 @@ if __name__ == "__main__":
     FINAL = ("fin","final","fs")
     tol = 0.005 #Default tolerance, i.e., if the (abs) difference in Bader charge is less than 0.005, it will treated as 0
     cmp = plt.cm.RdBu_r #Default colormap also in function, can be changed to any desired, plt already imported
-    repeat = (2,2,1) #In case of adsorbate atoms extending over the unit cell, this will increase the size of periodicity
+    repeat = (1,1,1) #In case of adsorbate atoms extending over the unit cell, this will increase the size of periodicity
     save_dir="Bader_plots" #Save folder
 
     views = [ #Different rotations to view atomic/surface configurations

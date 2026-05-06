@@ -3,6 +3,9 @@
 
 #Use to collect, visualise atomic structures
 from ase.visualize.plot import plot_atoms
+from ase.visualize import view
+#Use to write temporary files
+from ase.io import write
 
 #Plot atoms and use colormap where necessary
 import matplotlib.pyplot as plt #Plot adsorption surfaces
@@ -10,9 +13,34 @@ import matplotlib.pyplot as plt #Plot adsorption surfaces
 import os #Operating system
 
 #Import external functions
-from atoms import load_atoms
 from colors import get_atom_colors, get_delta_colors
 from layouts import create_axes, iter_axes
+
+#Create a temporary file to check images
+def view_cleanup(atoms, filename="temp_view.png", pause=True):
+
+    #Write structure to temporary image
+    write(filename, atoms,format="png",rotation="0x,0y,0z",show_unit_cell=1)
+
+    #Display image
+    img = plt.imread(filename)
+    plt.figure()
+    plt.imshow(img)
+    plt.axis("off")
+    plt.show(block=False)
+
+    #Pause for inspection
+    if pause:
+        input("Press Enter to close the figure...")
+
+    #Close figure
+    plt.close()
+
+    #Delete temp file
+    try:
+        os.remove(filename)
+    except OSError:
+        pass
 
 #Plot all configurations, including with Bader charge difference shading gradients
 def plot_bader_result(res, tol=0.005, cmap=None, repeat = (1,1,1), save_dir="Bader_plots",views=None,element_colors=None,layout="mixed_left"):
@@ -30,8 +58,15 @@ def plot_bader_result(res, tol=0.005, cmap=None, repeat = (1,1,1), save_dir="Bad
         cmap = plt.cm.RdBu_r
 
     #Read both initial and final configurations
-    atoms_ini = load_atoms(res["ini_structure"], repeat)
-    atoms_fin = load_atoms(res["fin_structure"], repeat)
+    atoms_ini = res["ini_structure"].copy()
+    #atoms_ini.set_pbc(False)
+    atoms_fin = res["fin_structure"].copy()
+    #atoms_fin.set_pbc(False)
+
+    #For visualisation
+    if repeat != (1, 1, 1):
+        atoms_ini = atoms_ini.repeat(repeat)
+        atoms_fin = atoms_fin.repeat(repeat)
 
     #Different rotations of images
     n_rot = len(views)
