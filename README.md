@@ -1,6 +1,8 @@
 # BaderCharge_plotter
 Leverages ASE, numpy and pyplot to calculate the differences in Bader charges between two structures acquired from VASP and then colour the different atoms according to the difference in charge (i.e., whether positive or negative).
 
+Version 2 (v2) current release.
+
 ## Folder structure
 
 reactionORtransition/
@@ -27,7 +29,7 @@ python main.py
 
 layout = "horizontal" | "vertical" | "split" #I.e., How the images should be displayed in the final figure
 
-repeat = (2,2,1) #i.e., periodic cell expansion
+repeat = (1,1,1) #i.e., periodic cell expansion
 
 views = [('0x,0y,0z')] #i.e., top view
 
@@ -44,8 +46,7 @@ save_dir="Bader_plots" #Save folder
 element_colors = {"Ni": "lightgray", "C": "black",} #Define desired colors for atoms in POSCAR/CONTCAR if desired, else default colours will be used
 
 ## external function files
-io_utils
-#Collect file locations (POSCAR, CONTCAR, ACF.dat) for subsequent call
+io_utils #Collect file locations (POSCAR, CONTCAR, ACF.dat) for subsequent call
 
 atoms #Load atoms
 
@@ -58,6 +59,10 @@ plotting #Plot Bader charge and save figures
 colors #Set atomic colors and colormap for Bader charge
 
 layouts #Set display configurations of ASE images (with colors)
+
+geometry #Shifts in x,y direction where necessary
+
+inputs #Different options of atomic shifting and image collection
 
 # Example
 One example is provided (the "C6" folder), which you can use to observe the functionality of this code by running the main.py file. Please note that this is for single hydrogenation of the C6 atom of the furfural molecule. Feel free to delete these examples when running your own code. Please see a figure below:
