@@ -65,6 +65,7 @@ geometry #Shifts in x,y direction where necessary
 inputs #Different options of atomic shifting and image collection
 
 # Example
-One example is provided (the "C6" folder), which you can use to observe the functionality of this code by running the main.py file. Please note that this is for single hydrogenation of the C6 atom of the furfural molecule. Feel free to delete these examples when running your own code. Please see a figure below:
+Two examples are provided (the "C6" and "CH2O" folders), which you can use to observe the functionality of this code by running the main.py file. Please note that this is for single hydrogenation of the C6 atom of the furfural molecule and the O7 atom of the F-CH2O molecule. Feel free to delete these examples when running your own code. Please see a figure below:
 
 ![Example figure of bader charge changes of C6 hydrogenation of furfural](Bader_plots/Hydrogenation/Hydrogenation_C6.png)
+![Example figure of bader charge changes of CH2O hydrogenation of furfural](Bader_plots/Hydrogenation/Hydrogenation_CH2O.png)
