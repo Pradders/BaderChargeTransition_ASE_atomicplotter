@@ -64,6 +64,19 @@ geometry #Shifts in x,y direction where necessary
 
 inputs #Different options of atomic shifting and image collection
 
+## General procedure
+Atoms will be shifted in a given direction (see below) in case they extend over the unit cell dimensions, especially in the x,y procedure. Shift will be relative to the atom in each system that possesses the highest radius.
+
+Select shift and confirm mode:
+1: Same shift per (ini, fin) pair
+2: Manual shift for EACH structure
+3: Same shift for ALL images
+
+The initial image will be displayed to check visually for the user how much the atoms should be shifted.
+Input the shift for x/y as integer multiples of the maximum covalent diameter (e.g., -1, 0, _1, etc., N.B. negative = left/down, positive = right/up). That is, all of the atoms will be shifted left or right depending on what input value and sign is input. This scalar value multiplied by the diameter will shift the atoms by that distance.
+
+Images will be output and saved, automatically in a mixed format, where ini/fin are arranged vertically on the left and the fin image with Bader charge transition colours singularly on the right. The colours of the charge transition can be varied as well.
+
 # Example
 Two examples are provided (the "C6" and "CH2O" folders), which you can use to observe the functionality of this code by running the main.py file. Please note that this is for single hydrogenation of the C6 atom of the furfural molecule and the O7 atom of the F-CH2O molecule. Feel free to delete these examples when running your own code. Please see a figure below:
 
