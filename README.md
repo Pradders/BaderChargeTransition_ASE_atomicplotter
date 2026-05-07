@@ -1,7 +1,7 @@
 # BaderCharge_plotter
 Leverages ASE, numpy and pyplot to calculate the differences in Bader charges between two structures acquired from VASP and then colour the different atoms according to the difference in charge (i.e., whether positive or negative).
 
-Version 3 (v3) current release.
+Version 1.4 (v1.4) current release.
 
 # General procedure
 
@@ -15,9 +15,14 @@ The atomic positions (POSCAR/CONTCAR) and the Bader charges (ACF.dat) will have 
 Additionally, atoms will be shifted in a given direction in case they (particularly adsorbates) extend over the unit cell dimensions, especially in the x,y planes and will be relative to the atom in each system that possesses the highest radius. The user will need to input integers of the x, y shifts, which will be multiplied by the maximum covalent diameter in the system (i.e., input such integers as -1, 0, +1, etc., where negative = left/down shift and positive = right/up shift). That is, all of the atoms will be shifted left, right, up, or down depending on what input value and sign is input.
 
 For reviewing images for shifting, one of the following methods must be selected and confirmed:
+
 1: Same shift per (ini, fin) pair (That is, whatever shift is selected for the initial image will also be projected to the final image and each image set will be iterated through. The initial unprojected image will be displayed prior to assigning the shift and the final projected image will be displayed as well.)
+
 2: Manual shift for EACH structure (That is, this expands from mode 1, though each individual image will be checked and projected rather than in pairs.)
+
 3: Same shift for ALL images (That is, after the shift is applied to one image set, this will be globalised as a variable and then applied to all other images.)
+
+4: NO shift to ANY image (That is, apply no shift to any individual image)
 
 If any of the inputs (see [Inputs](#inputs)) are not appropriately met with the program requirements, then the inputs will be looped and re-initiated for the user. 
 
@@ -25,7 +30,7 @@ If any of the inputs (see [Inputs](#inputs)) are not appropriately met with the 
 ### Mode selection
 The inputs are as follows (N.B. if these are not followed, then these questions will be repeated until an appropriate response is provided):
 
-Enter mode (1/2/3):
+Enter mode (1/2/3/4):
 
 Confirm mode x? (y/n):
 
