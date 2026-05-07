@@ -25,7 +25,7 @@ def get_atom_colors(atoms,element_colors=None):
     return colors #Output colors
 
 #Collect Bader shading colors
-def get_delta_colors(delta, cmap, tol=0.005, repeat = (1,1,1)):
+def get_delta_colors(delta, max_abs, cmap, tol=0.005, repeat = (1,1,1)):
 
     #Must multiply Bader charge by number of periodic cell repetitions
     nrep = repeat[0] * repeat[1] * repeat[2]
@@ -39,15 +39,15 @@ def get_delta_colors(delta, cmap, tol=0.005, repeat = (1,1,1)):
     #Use maximum absolute value as termini for colour shading
     if len(delta_plot) == 0: #Check first that the data array is not empty
         raise ValueError("Empty delta array — nothing to plot")
-    else:
-        max_abs = np.max(np.abs(delta_plot))
+    #else:
+        #max_abs = np.max(np.abs(delta_plot))
 
-        if max_abs == 0: #Check as well that the maximum values is 0, otherwise assign a miniscule number
-            max_abs = 1e-12
+    if max_abs == 0: #Check as well that the maximum values is 0, otherwise assign a miniscule number
+        max_abs = 1e-12
 
     #Set colourmap range
     norm = TwoSlopeNorm(
-        vmin=-max_abs,
+        vmin=-max_abs, #Where possible, use the maximum absolute number obtained across all images as the range
         vcenter=0,
         vmax=max_abs
     )

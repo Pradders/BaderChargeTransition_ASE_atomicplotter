@@ -19,6 +19,9 @@ def collect_delta_results(structure_files, skip_errors=False):
     #Initialise the array containing the Bader charge differences
     delta_results = []
 
+    #Initialise a variable to determine the maximum range of Bader charge
+    delta_max = 0.0
+
     for item in structure_files: #Read file list
 
         try:
@@ -46,6 +49,12 @@ def collect_delta_results(structure_files, skip_errors=False):
             #Calculate Bader charge difference
             delta_q = np.round(np.array(fin_q) - np.array(ini_q), 3)
 
+            #Calculate maximum charge difference
+            local_max = np.max(np.abs(delta_q))
+            #Check if the local maximum is higher than the current maximum. If so, update delta_max
+            if local_max > delta_max:
+                delta_max = local_max
+
             #Unwrap both initial and final structures
             ini_atoms_update, fin_atoms_update = process_structures(ini_atoms, fin_atoms)
 
@@ -72,4 +81,4 @@ def collect_delta_results(structure_files, skip_errors=False):
     #print(delta_results)
 
     #Output this array for future use
-    return delta_results
+    return delta_results, delta_max

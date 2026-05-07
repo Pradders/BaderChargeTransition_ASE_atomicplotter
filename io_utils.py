@@ -97,15 +97,20 @@ def find_transition(base=os.getcwd(),initial=("ini",),final=("fin",)):
             ini_acf = os.path.join(ini_dir, "ACF.dat")
             fin_acf = os.path.join(fin_dir, "ACF.dat")
 
+            #Root folder, relative to code location
+            transition = os.path.relpath(root, base)
+
             #Add directories and root folder into a file for easier access
             if all([ini_struct and fin_struct and os.path.isfile(ini_acf) and os.path.isfile(fin_acf)]): #As long that all files are accessible, else skip an image(s)
                 structure_files.append({
-                    "transition": os.path.relpath(root, base), #Root folder, relative to code location
+                    "transition": transition, 
                     "ini_structure": ini_struct, #Initial structure
                     "fin_structure": fin_struct, #Final structure
                     "ini_acf": ini_acf, #Initial charges
                     "fin_acf": fin_acf #Final charges
                 })
+
+            
 
     #Check item lists just in case to ensure that each file was indeed read
     #for item in structure_files:

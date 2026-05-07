@@ -10,9 +10,16 @@ import matplotlib.pyplot as plt #Plot function, called here only to account for 
 #Define the main function to run imported functions
 def main(base, INITIAL=("ini",), FINAL=("fin",), tol=0.005, cmp=None, repeat=(1,1,1), save_dir="Bader_plots",views=None,element_colors=None,layout="split"):
     structure_files = find_transition(base,INITIAL,FINAL)
-    delta_results = collect_delta_results(structure_files, skip_errors=True)
+    delta_results, delta_max = collect_delta_results(structure_files, skip_errors=True)
     for res in delta_results:
-        plot_bader_result(res,tol,cmp,repeat,save_dir,views,element_colors,layout)
+        try: #Output the name of the transition here to enable the user to know which system has been processed
+            parts = res["transition"].split(os.sep)
+            transition_name = "_".join(parts)
+            print(f"\nProcessing: {transition_name}")
+        except Exception as e: #In case the file name cannot be found, pass an error message
+            print(f"Error processing {res['transition']}: {e}")
+            continue
+        plot_bader_result(res,delta_max,tol,cmp,repeat,save_dir,views,element_colors,layout)
 
 #Entry point/switch to run function
 if __name__ == "__main__":

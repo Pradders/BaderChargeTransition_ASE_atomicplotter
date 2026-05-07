@@ -43,7 +43,7 @@ def view_cleanup(atoms, filename="temp_view.png", pause=True):
         pass
 
 #Plot all configurations, including with Bader charge difference shading gradients
-def plot_bader_result(res, tol=0.005, cmap=None, repeat = (1,1,1), save_dir="Bader_plots",views=None,element_colors=None,layout="mixed_left"):
+def plot_bader_result(res, delta_max=1, tol=0.005, cmap=None, repeat = (1,1,1), save_dir="Bader_plots",views=None,element_colors=None,layout="mixed_left"):
 
     # skip empty delta
     if res["delta"] is None or len(res["delta"]) == 0:
@@ -76,7 +76,7 @@ def plot_bader_result(res, tol=0.005, cmap=None, repeat = (1,1,1), save_dir="Bad
     # left plot (element colors), as set in main file
     atom_colors = get_atom_colors(atoms_fin,element_colors)
     # right plot (delta colors), use colourmap as set in main file
-    slope_colors, norm = get_delta_colors(res["delta"], cmap, tol, repeat)
+    slope_colors, norm = get_delta_colors(res["delta"], delta_max, cmap, tol, repeat)
 
     #Either horizontal or vertical
     if mode == "grid":
