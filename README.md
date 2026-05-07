@@ -1,7 +1,7 @@
 # BaderCharge_plotter
 Leverages ASE, numpy and pyplot to calculate the differences in Bader charges between two structures acquired from VASP and then colour the different atoms according to the difference in charge (i.e., whether positive or negative).
 
-Version 2 (v2) current release.
+Version 3 (v3) current release.
 
 # General procedure
 
@@ -45,10 +45,10 @@ Press Enter to close the figure...
 Accept this result? (y/n): y (Starts after closing the figure.)
 
 ## Colour coding
-After conducting the projections, the difference in Bader charge between both images will be calculated. From this, the initial and final atomic systems will be elementally colour-coded which can be configured (e.g., Ni = lightgray, C = black) and saved into an image and the final image will be reincluded adjacent and colour coded (default: red-blue) using a colormap depending on the Bader charge range. The initial and final images will be arranged vertically on the left-hand side of the image and the Bader charge transition image will be included singularly on the right-hand side of the image. Any Bader charge difference values below the given threshold (default: 0.005) will be zeroed and therefore not coloured. All images will be given as top view (default: ('0x,0y,0z')) and as single periodicity ((1,1,1)) by default and can be adjusted.
+After conducting the projections, the difference in Bader charge between both images will be calculated. From this, the initial and final atomic systems will be elementally colour-coded which can be configured (e.g., Ni = lightgray, C = black) and saved into an image and the final image will be reincluded adjacent and colour coded (default: red-blue) using a colormap depending on the Bader charge range. Please note that the maximum absolute Bader charge difference across all images will be stored and used in determining the colormap range. The initial and final images will be arranged vertically on the left-hand side of the image and the Bader charge transition image will be included singularly on the right-hand side of the image. Any Bader charge difference values below the given threshold (default: 0.005) will be zeroed and therefore not coloured. All images will be given as top view (default: ('0x,0y,0z')) and as single periodicity ((1,1,1)) by default and can be adjusted.
 
 ## Image saving
-The figures will be saved in a new folder called "Bader_plots". Furthermore, if the ini and fin folders are nested within additional folders, the os.walk() function will find them, the folder locations will be stored and these new folders will be created within "Bader_plots" to save the images, so as to make them easier to find.
+The figures will be saved in a new folder called "Bader_plots". Furthermore, if the ini and fin folders are nested within additional folders, the os.walk() function will find them, the folder locations will be stored and these new folders will be created within "Bader_plots" to save the images, so as to make them easier to find. Prior to the images being output and saved, the folder/image name will be printed for reference.
 
 Example saved images are provided below.
 
@@ -105,11 +105,11 @@ element_colors = {"Ni": "lightgray", "C": "black",} #Define desired colors for a
 
 [`check.py`](check.py) #Ensure consistency between files, especially with number of atoms and atomic positions between POSCAR/CONTCAR and ACF.dat
 
-[`analysis.py`](analysis.py) #Collect Bader charges and calculate charge difference between 2 states
+[`analysis.py`](analysis.py) #Collect Bader charges and calculate charge difference between 2 states, also outputs maximum absolute charge difference
 
 [`plotting.py`](plotting.py) #Plot Bader charge and save figures
 
-[`colors.py`](colors.py) #Set atomic colors and colormap for Bader charge
+[`colors.py`](colors.py) #Set atomic colors and colormap for Bader charge. Also inputs same maximum absolute charge difference to apply to Bader charge colormap.
 
 [`layouts.py`](layouts.py) #Set display configurations of ASE images (with colors)
 
