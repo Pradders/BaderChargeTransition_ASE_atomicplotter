@@ -1,7 +1,7 @@
 # BaderCharge_plotter
 Leverages ASE, numpy and pyplot to calculate the differences in Bader charges between two structures acquired from VASP and then colour the different atoms according to the difference in charge (i.e., whether positive or negative).
 
-Version 1.4 (v1.4) current release.
+Version 1.5 (v1.5) current release.
 
 # General procedure
 
@@ -9,7 +9,7 @@ Version 1.4 (v1.4) current release.
 This analysis will calculate the Bader charge difference between the initial and final stages of a transition state (e.g., NEB).
 
 ## Folder and file access
-The atomic positions (POSCAR/CONTCAR) and the Bader charges (ACF.dat) will have been collected through VASP calculations. These will be placed within the initial and final folders of each reaction/transition, relative to the main.py file, which is the main file that executes the code. The names of the initial and final folders are respectively "ini" and "fin" by default and additional and/or replacement names (e.g., "initial", "final", "is", "fs") can be provided.
+The atomic positions (POSCAR/CONTCAR) and the Bader charges (ACF.dat) will have been collected through VASP calculations. These will be placed within the initial and final folders of each reaction/transition, relative to the main.py file, which is the main file that executes the code. The names of the initial and final folders are respectively "ini" and "fin" by default and additional and/or replacement names (e.g., "initial", "final", "is", "fs") can be provided. If a .json file containing the maximum desired Bader charge already exists, then the user can choose to import the value or ignore it.
 
 ## Projection
 Additionally, atoms will be shifted in a given direction in case they (particularly adsorbates) extend over the unit cell dimensions, especially in the x,y planes and will be relative to the atom in each system that possesses the highest radius. The user will need to input integers of the x, y shifts, which will be multiplied by the maximum covalent diameter in the system (i.e., input such integers as -1, 0, +1, etc., where negative = left/down shift and positive = right/up shift). That is, all of the atoms will be shifted left, right, up, or down depending on what input value and sign is input.
@@ -20,13 +20,27 @@ For reviewing images for shifting, one of the following methods must be selected
 
 2: Manual shift for EACH structure (That is, this expands from mode 1, though each individual image will be checked and projected rather than in pairs.)
 
-3: Same shift for ALL images (That is, after the shift is applied to one image set, this will be globalised as a variable and then applied to all other images.)
+3: Same shift for ALL images (That is, after the shift is applied to one image set, this will be globalised as a variable and then applied to all other images. In this mode, if shift.json already exists, then it can be input. Afterwards, it may be deleted.)
 
 4: NO shift to ANY image (That is, apply no shift to any individual image)
 
 If any of the inputs (see [Inputs](#inputs)) are not appropriately met with the program requirements, then the inputs will be looped and re-initiated for the user. 
 
+## Colour coding
+After conducting the projections, the difference in Bader charge between both images will be calculated. From this, the initial and final atomic systems will be elementally colour-coded which can be configured (e.g., Ni = lightgray, C = black) and saved into an image and the final image will be reincluded adjacent and colour coded (default: red-blue) using a colormap depending on the Bader charge range. Please note that the maximum absolute Bader charge difference across all images will be stored and used in determining the colormap range. The initial and final images will be arranged vertically on the left-hand side of the image and the Bader charge transition image will be included singularly on the right-hand side of the image. Any Bader charge difference values below the given threshold (default: 0.005) will be zeroed and therefore not coloured. All images will be given as top view (default: ('0x,0y,0z')) and as single periodicity ((1,1,1)) by default and can be adjusted.
+
+## Image saving
+The figures will be saved in a new folder called "Bader_plots". Furthermore, if the ini and fin folders are nested within additional folders, the os.walk() function will find them, the folder locations will be stored and these new folders will be created within "Bader_plots" to save the images, so as to make them easier to find. Prior to the images being output and saved, the folder/image name will be printed for reference.
+
+Example saved images are provided below.
+
 ## Inputs
+### Bader.json found
+
+Existing bader_max.json found. Load saved maximum Bader charge difference?
+
+Accept this result/outcome? (y/n):
+
 ### Mode selection
 The inputs are as follows (N.B. if these are not followed, then these questions will be repeated until an appropriate response is provided):
 
@@ -47,15 +61,12 @@ Shift in y (multiples of diameter, N.B. negative = left/down, positive = right/u
 
 Press Enter to close the figure...
 
-Accept this result? (y/n): y (Starts after closing the figure.)
+Accept this result? (y/n): y (Starts after closing the figure)
 
-## Colour coding
-After conducting the projections, the difference in Bader charge between both images will be calculated. From this, the initial and final atomic systems will be elementally colour-coded which can be configured (e.g., Ni = lightgray, C = black) and saved into an image and the final image will be reincluded adjacent and colour coded (default: red-blue) using a colormap depending on the Bader charge range. Please note that the maximum absolute Bader charge difference across all images will be stored and used in determining the colormap range. The initial and final images will be arranged vertically on the left-hand side of the image and the Bader charge transition image will be included singularly on the right-hand side of the image. Any Bader charge difference values below the given threshold (default: 0.005) will be zeroed and therefore not coloured. All images will be given as top view (default: ('0x,0y,0z')) and as single periodicity ((1,1,1)) by default and can be adjusted.
+### Delete shift.json
+Existing shift.json detected. Delete shift.json?
 
-## Image saving
-The figures will be saved in a new folder called "Bader_plots". Furthermore, if the ini and fin folders are nested within additional folders, the os.walk() function will find them, the folder locations will be stored and these new folders will be created within "Bader_plots" to save the images, so as to make them easier to find. Prior to the images being output and saved, the folder/image name will be printed for reference.
-
-Example saved images are provided below.
+Accept this result/outcome? (y/n):
 
 # Key files, folders and inputs
 
@@ -104,7 +115,7 @@ save_dir="Bader_plots" #Save folder
 element_colors = {"Ni": "lightgray", "C": "black",} #Define desired colors for atoms in POSCAR/CONTCAR if desired, else default colours will be used
 
 ## external function files
-[`io_utils.py`](io_utils.py) #Collect file locations (POSCAR, CONTCAR, ACF.dat) for subsequent call
+[`io_utils.py`](io_utils.py) #Collect file locations (POSCAR, CONTCAR, ACF.dat, .json files) for subsequent call
 
 [`atoms.py`](atoms.py) #Load atoms
 
