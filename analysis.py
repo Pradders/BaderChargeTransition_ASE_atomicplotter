@@ -7,9 +7,9 @@ from ase.io import read
 import numpy as np #Mathematical calculations
 
 #Import external functions
-from io_utils import read_bader
+from io_utils import read_bader, delete_file, load_json, save_json
 from check import check_Bader_consistency, check_bader_alignment
-from inputs import process_structures, delete_shift
+from inputs import process_structures, confirm
 
 import os #Operating system
 
@@ -21,6 +21,12 @@ def collect_delta_results(structure_files, skip_errors=False):
 
     #Initialise a variable to determine the maximum range of Bader charge
     delta_max = 0.0
+
+    if os.path.exists("bader_max.json"): #In case an existing bader_max.json file can be found
+
+        print("Existing bader_max.json found. Load saved maximum Bader charge difference?")
+        if confirm():
+            delta_max = float(load_json("bader_max.json")) #If desired, load bader_max file
 
     for item in structure_files: #Read file list
 
@@ -75,10 +81,16 @@ def collect_delta_results(structure_files, skip_errors=False):
 
     #If the shift json file is created, then delete it after use
     if os.path.exists("shift.json"):
-        delete_shift()
+        print("Existing shift.json detected. Delete shift.json?")
+        if confirm():
+            delete_file("shift.json")
+            print("shift.json deleted.")
 
     #Print if desired
     #print(delta_results)
+
+    #Save updated maximum for future reuse
+    save_json(delta_max, "bader_max.json")
 
     #Output this array for future use
     return delta_results, delta_max

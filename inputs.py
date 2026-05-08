@@ -1,8 +1,7 @@
-import os #Operating system
 from geometry import build_shift, apply_shift #Atomic shifting functions
 from plotting import view_cleanup #Create a temporary figure(s)
-import json #JS file
 import numpy as np #Mathematical calculations
+from io_utils import save_json, load_json
 
 _current_mode = None #Global variable in selecting mode of imaging
 
@@ -43,32 +42,12 @@ def choose_mode():
 #Used to accept a result
 def confirm():
     while True:
-        ans = input("Accept this result? (y/n): ").lower()
+        ans = input("Accept this result/outcome? (y/n): ").lower()
         if ans in ["y", "n"]:
             return ans == "y"
         print("Please enter 'y' or 'n'.")
 
-#If Mode 3, save the constant shift in a json file to reuse it
-def save_shift(shift, filename="shift.json"):
-    data = {
-        "shift": shift.tolist()
-    }
-    with open(filename, "w") as f:
-        json.dump(data, f)
-#If Mode 3, load the constant shift from the saved json file to reuse it
-def load_shift(filename="shift.json"):
-    try:
-        with open(filename, "r") as f:
-            data = json.load(f) #Open is possible
-        return np.array(data["shift"])
-    except FileNotFoundError:
-        return None
-#If Mode 3, delete the saved json shift file after each file is looped through
-def delete_shift(filename="shift.json"):
-    try:
-        os.remove(filename) #Delete if possible
-    except FileNotFoundError:
-        pass
+
 
 #Dependin on the mode selected, apply appropriate imaging collection method
 def process_structures(atoms_ini, atoms_fin):
@@ -109,7 +88,7 @@ def process_structures(atoms_ini, atoms_fin):
 
     elif mode == 3: #Mode 3: same shift for each individual image
 
-        shift = load_shift() #Load constant shift
+        shift = load_json("shift.json") #Load constant shift
 
         if shift is None: #If no shift file, save one first and then reuse it
 
@@ -119,9 +98,9 @@ def process_structures(atoms_ini, atoms_fin):
                 test_fin = apply_shift(atoms_fin,shift) #Apply shift to final image
 
                 view_cleanup(test_fin) #Check images temporarily if they look OK, especially after input shift constant factor
-
+                
                 if confirm(): #Accept result or not
-                    save_shift(shift) #Save shift json file
+                    save_json(shift,"shift.json") #Save shift json file
                     break
 
         else:

@@ -3,7 +3,6 @@
 
 #Use to collect, visualise atomic structures
 from ase.visualize.plot import plot_atoms
-from ase.visualize import view
 #Use to write temporary files
 from ase.io import write
 

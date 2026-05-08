@@ -1,7 +1,7 @@
 #For data acquisition
 
 import numpy as np #Mathematical calculations
-
+import json #JS file
 import os #Operating system
 
 #Collect CONTCAR folder location first, failing that POSCAR folder location, or failing that raise an error
@@ -119,3 +119,24 @@ def find_transition(base=os.getcwd(),initial=("ini",),final=("fin",)):
     #    print("  fin:", item["fin_structure"])
 
     return structure_files #Output the file locations
+
+#If Mode 3, save any constants in a json file to reuse it
+def save_json(entry, filename):
+    data = {
+        "value": entry.tolist() if hasattr(entry, "tolist") else entry
+    }
+    with open(filename, "w") as f:
+        json.dump(data, f)
+#If Mode 3, load any constants from the saved json file to reuse it
+def load_json(filename):
+    try:
+        with open(filename, "r") as f:
+            return np.array(json.load(f)["value"])
+    except FileNotFoundError:
+        return None
+#If Mode 3, delete the saved json file after each file is looped through
+def delete_file(filename):
+    try:
+        os.remove(filename) #Delete if possible
+    except FileNotFoundError:
+        pass
